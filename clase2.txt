@@ -1,0 +1,29 @@
+6:36 p. m. 4/07/2018
+
+1)instalar mongosee
+ver anotaciones en codigo index.js
+
+2) crear servidor de node
+3) app.js sirve para manejar las rutas y funciones
+dentro de la aplicacion
+4)instalar postman
+5)instalar express
+: npm install --save express
+6) descargar libreria bodyParser
+Manejar los parametros en formato JSON
+: npm install --save body-parser
+
+npm = node package manager 
+node = es un lenguaje no compilado
+el comando para correr server node es {node .}
+
+7) instalar demonio de linux para recargar automaticamente
+nodeMong
+npm install --save nodemon
+en packaje.son, en scripts, declarar: "start" :"nodemon index.js"
+
+en vez de {node.} ahora es npm start
+arquitectura de microservicio:
+correr el node por cada microservicio
+
+bucket as3, de aws

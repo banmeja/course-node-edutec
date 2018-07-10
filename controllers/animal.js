@@ -40,8 +40,8 @@ function saveAnimal(req, res) {
     if (params.name) {
         animal.name = params.name
         animal.description = params.description
-            //animal.origen.country = params.country
-            //animal.origen.state = params.state
+        animal.origen.country = params.country
+        animal.origen.state = params.state
         animal.image = null;
 
         animal.addAnimal((err, animalStored) => {

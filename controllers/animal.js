@@ -43,8 +43,8 @@ function saveAnimal(req, res) {
         animal.origen.country = params.country
         animal.origen.state = params.state
         animal.image = null;
-
-        animal.addAnimal((err, animalStored) => {
+        //.save el propio de mongoose
+        animal.save((err, animalStored) => {
             if (err) {
                 res.status(500).send({
                     message: 'Fallo en el servidor'

@@ -10,8 +10,8 @@ var api = express.Router();
 //router indica todas las rutas
 //crud
 api.get('/animals', AnimalController.getAnimals); //buscar todos los animales | ,ejecutar del controlador.metodo
-api.get('animal/:id'); //buscar un animal
-api.post('/animal'); //agregar un animal
+api.get('animal/:id', AnimalController.getAnimal); //buscar un animal
+api.post('/animal', AnimalController.saveAnimal); //agregar un animal
 api.post('/animals'); //agregar lista de animales
 api.put('/animal/:id'); //actualizar por id
 api.delete('/animal/:id'); //borrar animal

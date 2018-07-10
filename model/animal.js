@@ -15,6 +15,9 @@ var AnimalSchema = Schema({
     }
 });
 
+//se agrego el metodo de post
+
+
 //se exporta el esquema
 module.exports = mongoose.model('Animal', AnimalSchema);
 

@@ -1,4 +1,5 @@
 "use strict"
+//donde se declaran las librerias o modulos globales
 
 var mongoose = require('mongoose');
 var port = 3000;
@@ -7,8 +8,8 @@ var app = require('./app');
 //promesas, mongoose trabaja en base a promesas
 mongoose.Promise = global.Promise;
 //conexion a base de datos de mongo
-//mongoose.connect('mongodb://localhost:27017/zoo', )
-mongoose.connect('mongodb://test:testedutec18@ds123490.mlab.com:23490/zooedu', ) // { useMongoClient: true } se quita para la nueva version, en este caso 5.2.1
+mongoose.connect('mongodb://localhost:27017/zoo', )
+    //mongoose.connect('mongodb://test:testedutec18@ds123490.mlab.com:23490/zooedu', ) // { useMongoClient: true } se quita para la nueva version, en este caso 5.2.1
     .then(() => {
         console.log('La conexión a mongo a sido exitosa');
         app.listen(port, () => {

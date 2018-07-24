@@ -9,12 +9,14 @@ var app = express();
 //configuracion de bodyParser | por defecto es true, pero no se quiere que se encode la url.
 
 var animalRoutes = require('./routes/animal');
+var userRoutes = require('./routes/user');
 //variable que conecta con la ruta (A*)
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //configurar el dominio/api   | ejemplo base de datos (api=conjunto de endpoints) api no es lo mismo que webservice
-app.use('/api', animalRoutes); //se llama a la var que conecta con la ruta (A*)
+app.use('/api', animalRoutes);
+app.use('/registro', userRoutes); //se llama a la var que conecta con la ruta (A*)
 //usar el mvc ¿modelos, controladores¿rutas
 //1 para construir api, lo primero es un modelo= es la capa de datos que se conecta a los controladores | contiene las propiedades de un objeto
 

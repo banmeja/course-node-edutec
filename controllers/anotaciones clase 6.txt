@@ -1,0 +1,2 @@
+validaciones para ver el token
+1) que el token no este expirado : se hace en el archivo autenticated js

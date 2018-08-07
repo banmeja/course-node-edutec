@@ -1,10 +1,7 @@
 {
     "name": "course-node-edutec",
-    "engines": {
-        "node": "8.11.3"
-    },
     "version": "1.0.0",
-    "description": "course backend",
+    "description": "Edutec node",
     "main": "index.js",
     "scripts": {
         "start": "nodemon index.js",
@@ -14,9 +11,6 @@
         "type": "git",
         "url": "git+https://github.com/banmeja/course-node-edutec.git"
     },
-    "keywords": [
-        "node"
-    ],
     "author": "bsantiago",
     "license": "ISC",
     "bugs": {
@@ -25,9 +19,9 @@
     "homepage": "https://github.com/banmeja/course-node-edutec#readme",
     "dependencies": {
         "body-parser": "1.18.3",
-        "express": "4.16.3",
-        "mongoose": "5.2.1",
         "connect-multiparty": "2.0.0",
+        "express": "4.16.3",
+        "mongoose": "5.1.2",
         "nodemon": "1.17.5",
         "bcrypt-nodejs": "0.0.3",
         "jwt-simple": "0.5.1",

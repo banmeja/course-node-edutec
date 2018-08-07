@@ -1,2 +1,2 @@
 # course-node-edutec
-Curso backend con node js
+This is a repository for Edutec course

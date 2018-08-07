@@ -1,5 +1,8 @@
 {
     "name": "course-node-edutec",
+    "engines": {
+        "node": "8.11.2"
+    },
     "version": "1.0.0",
     "description": "course backend",
     "main": "index.js",

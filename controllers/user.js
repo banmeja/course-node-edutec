@@ -5,14 +5,9 @@ var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../services/jwt');
 var fs = require('fs');
 var path = require('path');
+var constants = require('../utils/constants').constants;
 
-var User = require('../model/user');
-
-function prueba(req, res) {
-    res.status(200).send({
-        message: 'Probando el controlador de usuario'
-    })
-}
+var User = require('../models/user');
 
 function register(req, res) {
     var user = new User();
@@ -26,10 +21,10 @@ function register(req, res) {
         user.role = 'ROLE_USER';
         user.image = null;
 
-        User.findOne({ email: user.email.toLowerCase() }, (err, issetUser) => {
+        User.findOne({email: user.email.toLowerCase()}, (err, issetUser) => {
             if (err) {
                 res.status(500).send({
-                    message: 'Error en el servidor'
+                    message: constants.ERROR_IN_REQUEST
                 });
             } else {
                 if (!issetUser) {
@@ -39,16 +34,16 @@ function register(req, res) {
                         user.save((err, userStored) => {
                             if (err) {
                                 res.status(500).send({
-                                    message: 'Error al guardar usuario'
+                                    message: constants.ERROR_IN_SAVE_USER
                                 });
                             } else {
                                 if (!userStored) {
                                     res.status(404).send({
-                                        message: 'No se ha registrado el usuario'
+                                        message: constants.USER_NOT_REGISTER
                                     });
                                 } else {
                                     res.status(200).send({
-                                        message: 'usuario guardado exitosamente',
+                                        message: constants.USER_SUCCESS_STORED,
                                         user: userStored
                                     });
                                 }
@@ -57,14 +52,14 @@ function register(req, res) {
                     })
                 } else {
                     res.status(200).send({
-                        message: 'El usuario no se pudo registrar'
+                        message: constants.USER_NOT_REGISTER
                     });
                 }
             }
         })
     } else {
         res.status(200).send({
-            message: 'Parametros erroneos'
+            message: constants.WRONG_PARAMETERS
         });
     }
 }
@@ -75,10 +70,10 @@ function login(req, res) {
     var email = params.email;
     var password = params.password;
 
-    User.findOne({ email: email.toLowerCase() }, (err, issetUser) => {
+    User.findOne({email: email.toLowerCase()}, (err, issetUser) => {
         if (err) {
             res.status(500).send({
-                message: 'Error al buscar su usuario'
+                message: constants.ERROR_IN_REQUEST
             });
         } else {
             if (issetUser) {
@@ -95,21 +90,145 @@ function login(req, res) {
                         }
                     } else {
                         res.status(200).send({
-                            message: 'El usuario no se ha logueado correctamente'
+                            message: constants.LOGIN_FAILED
                         });
                     }
                 })
             } else {
                 res.status(404).send({
-                    message: 'El usuario no ha podido loguearse'
+                    message: constants.LOGIN_FAILED
                 });
             }
         }
     });
 }
 
+function updateUser(req, res) {
+    var userId = req.params.id;
+    var updateData = req.body;
+    delete updateData.password;
+
+    if (userId != req.user.sub) {
+        return res.status(401).send({
+            message: constants.UPDATE_USER_NOT_ALLOWED
+        });
+    }
+
+    User.findByIdAndUpdate(userId, updateData, {new: true}, (err, userUpdated) => {
+        if (err) {
+            res.status(500).send({
+                message: constants.ERROR_IN_REQUEST
+            });
+        } else {
+            if (!userUpdated) {
+                res.status(404).send({
+                    message: constants.USER_NOT_UPDATED
+                });
+            } else {
+                res.status(200).send({
+                    user: userUpdated
+                });
+            }
+        }
+    });
+}
+
+function deleteUser(req, res) {
+    var userId = req.params.id;
+
+    User.findByIdAndRemove(userId, (err, userRemoved) => {
+        if (err) {
+            res.status(500).send({
+                message: constants.ERROR_IN_REQUEST
+            });
+        } else {
+            if (!userRemoved) {
+                res.status(404).send({
+                    message: constants.USER_NOT_DELETED
+                });
+            } else {
+                res.status(200).send({
+                    message: `El usuario ${userRemoved.email} se ha eliminado exitosamente`
+                });
+            }
+        }
+    });
+
+}
+
+function setAdminRole(req, res) {
+    var userId = req.params.id;
+
+    User.findByIdAndUpdate(userId, {role: 'ROLE_ADMIN'}, {new: true}, (err, userUpdated) => {
+        if(err) {
+            res.status(500).send({
+                message: constants.ERROR_IN_REQUEST
+            });
+        } else {
+            if (!userUpdated) {
+                res.status(404).send({
+                    message: constants.USER_NOT_UPDATED
+                });
+            } else {
+                res.status(200).send({
+                    user: userUpdated
+                });
+            }
+        }
+    });
+}
+
+function changePassword(req, res) {
+    var params = req.body;
+    if (params.email && params.password) {
+        var userEmail = params.email.toLowerCase();
+        var password = params.password;
+        User.findOne({email: userEmail}, (err, issetUser) => {
+            if (err) {
+                res.status(500).send({
+                    message: constants.ERROR_IN_REQUEST
+                });
+            } else {
+                if (issetUser) {
+                    bcrypt.hash(password, null, null, (err, hash) => {
+                        var newPassword = hash;
+                        User.findByIdAndUpdate(issetUser.id, {password: newPassword}, {new: true}, (err, userUpdated) => {
+                            if (err) {
+                                res.status(500).send({
+                                    message: constants.ERROR_IN_REQUEST
+                                });
+                            } else {
+                                if (!userUpdated) {
+                                    res.status(404).send({
+                                        message: constants.PASSWORD_NOT_UPDATED
+                                    });
+                                } else {
+                                    res.status(200).send({
+                                        message: constants.PASSWORD_UPDATED_SUCCESFULLY
+                                    });
+                                }
+                            }
+                        })
+                    })
+                } else {
+                    res.status(200).send({
+                        message: constants.USER_NOT_EXISTS
+                    });
+                }
+            }
+        })
+    } else {
+        res.status(200).send({
+            message: constants.WRONG_PARAMETERS
+        });
+    }
+}
+
 module.exports = {
-    prueba,
     register,
-    login
+    login,
+    updateUser,
+    deleteUser,
+    setAdminRole,
+    changePassword  
 }

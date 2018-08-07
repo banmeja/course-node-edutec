@@ -5,7 +5,7 @@ var port = process.env.PORT || 3000;
 var app = require('./app');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://test:test123@ds123490.mlab.com:23490/zooedu');
+mongoose.connect('mongodb://test:testedutec18@ds123490.mlab.com:23490/zooedu', )
 
 app.listen(port);
 
